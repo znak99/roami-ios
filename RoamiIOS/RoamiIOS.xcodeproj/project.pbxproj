@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		FB687D752DA5D72500F8AF3F /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = FB687D742DA5D72500F8AF3F /* Alamofire */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		FB687D172DA5BA7D00F8AF3F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -29,9 +33,22 @@
 		FB687D202DA5BA7D00F8AF3F /* RoamiIOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RoamiIOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		FB687D5B2DA5CF2E00F8AF3F /* Exceptions for "RoamiIOS" folder in "RoamiIOS" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = FB687D052DA5BA7C00F8AF3F /* RoamiIOS */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		FB687D082DA5BA7C00F8AF3F /* RoamiIOS */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				FB687D5B2DA5CF2E00F8AF3F /* Exceptions for "RoamiIOS" folder in "RoamiIOS" target */,
+			);
 			path = RoamiIOS;
 			sourceTree = "<group>";
 		};
@@ -52,6 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FB687D752DA5D72500F8AF3F /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +130,7 @@
 			);
 			name = RoamiIOS;
 			packageProductDependencies = (
+				FB687D742DA5D72500F8AF3F /* Alamofire */,
 			);
 			productName = RoamiIOS;
 			productReference = FB687D062DA5BA7C00F8AF3F /* RoamiIOS.app */;
@@ -195,6 +214,9 @@
 			);
 			mainGroup = FB687CFD2DA5BA7C00F8AF3F;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				FB687D732DA5D72500F8AF3F /* XCRemoteSwiftPackageReference "Alamofire" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = FB687D072DA5BA7C00F8AF3F /* Products */;
 			projectDirPath = "";
@@ -399,6 +421,7 @@
 				DEVELOPMENT_TEAM = SHUGXU55KP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = RoamiIOS/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Roami;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -435,6 +458,7 @@
 				DEVELOPMENT_TEAM = SHUGXU55KP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = RoamiIOS/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Roami;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -572,6 +596,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		FB687D732DA5D72500F8AF3F /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.10.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		FB687D742DA5D72500F8AF3F /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FB687D732DA5D72500F8AF3F /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = FB687CFE2DA5BA7C00F8AF3F /* Project object */;
 }
