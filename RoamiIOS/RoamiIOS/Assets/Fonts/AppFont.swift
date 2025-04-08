@@ -8,7 +8,7 @@
 import Foundation
 
 enum AppFont {
-    static let novaRound = "Nova-Round"
+    static let novaRound = "NovaRound"
     static let robotoBold = "Roboto-Bold"
     static let robotoSemiBold = "Roboto-SemiBold"
     static let robotoMedium = "Roboto-Medium"

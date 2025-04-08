@@ -8,10 +8,20 @@
 import SwiftUI
 
 struct RootView: View {
+    
+    @StateObject private var vm: RootViewModel = .init()
+    
     var body: some View {
         NavigationStack {
             ZStack {
-                TabBarView()
+                if vm.isAppReady {
+                    TabBarView()
+                } else {
+                    SplashView(isServerError: $vm.isServerError)
+                }
+            }
+            .onAppear {
+                vm.checkNetwork()
             }
         }
     }
