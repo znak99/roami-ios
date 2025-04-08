@@ -29,9 +29,22 @@
 		FB687D202DA5BA7D00F8AF3F /* RoamiIOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RoamiIOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		FB687D5B2DA5CF2E00F8AF3F /* Exceptions for "RoamiIOS" folder in "RoamiIOS" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = FB687D052DA5BA7C00F8AF3F /* RoamiIOS */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		FB687D082DA5BA7C00F8AF3F /* RoamiIOS */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				FB687D5B2DA5CF2E00F8AF3F /* Exceptions for "RoamiIOS" folder in "RoamiIOS" target */,
+			);
 			path = RoamiIOS;
 			sourceTree = "<group>";
 		};
@@ -399,6 +412,7 @@
 				DEVELOPMENT_TEAM = SHUGXU55KP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = RoamiIOS/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Roami;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -435,6 +449,7 @@
 				DEVELOPMENT_TEAM = SHUGXU55KP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = RoamiIOS/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Roami;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
