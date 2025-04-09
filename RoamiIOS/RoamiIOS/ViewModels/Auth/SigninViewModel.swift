@@ -50,7 +50,7 @@ final class SigninViewModel: ObservableObject {
         
         AuthManager.shared.signin(email: email, password: password) { result in
             switch result {
-            case .success(let data):
+            case .success:
                 self.isLoading = false
                 self.isShowSignedInAlert = true
             case .failure(let error):

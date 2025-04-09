@@ -37,10 +37,10 @@ struct ProfileView: View {
                         Image(systemName: "person.fill.questionmark")
                             .resizable()
                             .scaledToFit()
-                            .frame(width: 100)
+                            .frame(width: 72)
                             .foregroundStyle(Color.gray)
                         Text("No user info found!")
-                            .font(.custom(AppFont.robotoSemiBold, size: 20))
+                            .font(.custom(AppFont.robotoRegular, size: 16))
                             .foregroundStyle(Color.gray)
                         Button(action: {
                             vm.isShowAuthView.toggle()
@@ -48,18 +48,21 @@ struct ProfileView: View {
                             HStack {
                                 Spacer()
                                 Image(systemName: "person.and.background.dotted")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 36)
                                 Text("Sign in to Roami")
-                                    .font(.custom(AppFont.robotoMedium, size: 16))
+                                    .font(.custom(AppFont.robotoSemiBold, size: 20))
+                                    .underline()
                                 Spacer()
                             }
                             .padding()
                             .foregroundStyle(LinearGradient(colors: [Color.blue, Color.purple],
-                                                            startPoint: .leading,
-                                                            endPoint: .trailing))
+                                                            startPoint: .leading, endPoint: .trailing))
                         }
                         .frame(maxWidth: 240)
-                        .background(Color.white)
                         .clipShape(RoundedRectangle(cornerRadius: 8))
+                        .padding(.top)
                     }
                     Spacer()
                 }
