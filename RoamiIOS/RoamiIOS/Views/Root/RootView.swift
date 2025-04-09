@@ -17,7 +17,7 @@ struct RootView: View {
                 if vm.isAppReady {
                     TabBarView()
                 } else {
-                    SplashView(isServerError: $vm.isServerError)
+                    SplashView(isServerError: $vm.isNetworkError)
                 }
             }
             .onAppear {

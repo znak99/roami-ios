@@ -12,9 +12,9 @@ final class RootService: APIService {
     
     static let shared = RootService()
     
-    override init() {}
+    private override init() {}
     
-    func checkNetwork(completion: @escaping (Result<RootResponse, AFError>) -> Void) {
+    func checkNetwork(completion: @escaping (Result<RootResponse, NetworkError>) -> Void) {
         guard let url else {
             print("RootService Error: URL is nil")
             return
@@ -23,7 +23,12 @@ final class RootService: APIService {
         AF.request(url)
             .validate()
             .responseDecodable(of: RootResponse.self) { response in
-                completion(response.result)
+                switch response.result {
+                case .success(let data):
+                    completion(.success(data))
+                case .failure:
+                    self.handleAFError(response, completion: completion)
+                }
             }
     }
 }

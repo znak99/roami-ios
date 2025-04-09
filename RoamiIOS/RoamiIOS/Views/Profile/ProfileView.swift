@@ -62,7 +62,6 @@ struct ProfileView: View {
                         .frame(maxWidth: 240)
                         .background(Color.white)
                         .clipShape(RoundedRectangle(cornerRadius: 8))
-                        .shadow(color: Color.gray.opacity(0.2), radius: 0.2, x: 2, y: 2)
                     }
                     Spacer()
                 }
@@ -77,5 +76,5 @@ struct ProfileView: View {
 
 #Preview {
     ProfileView()
-        .environmentObject(AuthManager())
+        .environmentObject(AuthManager.shared)
 }

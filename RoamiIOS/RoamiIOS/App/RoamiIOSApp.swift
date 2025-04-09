@@ -10,12 +10,13 @@ import SwiftUI
 @main
 struct RoamiIOSApp: App {
     
-    @StateObject var authManager = AuthManager()
-    
     var body: some Scene {
         WindowGroup {
             RootView()
-                .environmentObject(authManager)
+                .environmentObject(AuthManager.shared)
+                .onAppear {
+                    AuthManager.shared.patchTokensFromUserDefaults()
+                }
         }
     }
 }

@@ -12,6 +12,9 @@ struct AuthView: View {
     @State private var gradientHeight: CGFloat = 0
     @State private var opacity: CGFloat = 0
     
+    @State private var hasAnimated: Bool = false
+    
+    @EnvironmentObject var authManager: AuthManager
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
@@ -59,24 +62,29 @@ struct AuthView: View {
                     
                     VStack(spacing: 40) {
                         VStack {
-                            NavigationLink(destination: EmptyView()) {
+                            NavigationLink(destination: SigninView()) {
                                 AuthEmailButton(icon: "at", text: "Sign In with Email", opacity: $opacity)
                             }
+                            .disabled(authManager.isAuthenticated)
                             NavigationLink(destination: EmptyView()) {
                                 AuthEmailButton(icon: "person.fill.badge.plus", text: "Sign Up with Email", opacity: $opacity)
                             }
+                            .disabled(authManager.isAuthenticated)
                         }
                         
                         VStack {
                             Button(action: {}) {
                                 AuthOAuthButton(image: "OAuth-Apple", text: "Sign In with Apple", opacity: $opacity)
                             }
+                            .disabled(authManager.isAuthenticated)
                             Button(action: {}) {
                                 AuthOAuthButton(image: "OAuth-Google", text: "Sign In with Google", opacity: $opacity)
                             }
+                            .disabled(authManager.isAuthenticated)
                             Button(action: {}) {
                                 AuthOAuthButton(image: "OAuth-Facebook", text: "Sign In with Facebook", opacity: $opacity)
                             }
+                            .disabled(authManager.isAuthenticated)
                         }
                     }
                     
@@ -85,16 +93,21 @@ struct AuthView: View {
                 .padding([.top, .horizontal])
             }
             .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    withAnimation(.easeOut(duration: 3)) {
-                        opacity += 1
-                        gradientHeight += 600
+                if authManager.isAuthenticated {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                        dismiss()
                     }
                 }
-            }
-            .onDisappear {
-                opacity -= 1
-                gradientHeight -= 600
+                
+                if !hasAnimated {
+                    hasAnimated = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        withAnimation(.easeOut(duration: 3)) {
+                            opacity += 1
+                            gradientHeight += 600
+                        }
+                    }
+                }
             }
         }
     }
