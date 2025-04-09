@@ -1,5 +1,5 @@
 //
-//  MomentView.swift
+//  MomentsView.swift
 //  RoamiIOS
 //
 //  Created by seungwoo on 2025/04/09.
@@ -7,17 +7,17 @@
 
 import SwiftUI
 
-struct MomentView: View {
+struct MomentsView: View {
     var body: some View {
         ZStack {
             Color.appBG.ignoresSafeArea()
             
             VStack {
                 HStack {
-                    Text("MOMENT")
+                    Text("MOMENTS")
                         .font(.custom(AppFont.novaRound, size: 32))
                     Spacer()
-                    NavigationLink(destination: SettingView()) {
+                    NavigationLink(destination: SettingsView()) {
                         Image(systemName: "pencil")
                             .resizable()
                             .scaledToFit()
@@ -33,5 +33,5 @@ struct MomentView: View {
 }
 
 #Preview {
-    MomentView()
+    MomentsView()
 }

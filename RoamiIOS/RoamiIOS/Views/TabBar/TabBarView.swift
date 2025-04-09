@@ -19,7 +19,7 @@ enum AppTab {
         case .upload:
             return "Upload"
         case .moment:
-            return "Moment"
+            return "Moments"
         case .profile:
             return "Profile"
         }
@@ -58,7 +58,7 @@ struct TabBarView: View {
                 case .upload:
                     UploadView()
                 case .moment:
-                    MomentView()
+                    MomentsView()
                 case .profile:
                     ProfileView()
                 }

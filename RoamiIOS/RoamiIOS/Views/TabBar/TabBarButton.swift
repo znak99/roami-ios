@@ -30,7 +30,7 @@ struct TabBarButton: View {
                              : LinearGradient(colors: [Color.gray],
                                               startPoint: .topLeading,
                                               endPoint: .bottomTrailing))
-            .frame(width: 48)
+            .frame(width: 56)
         }
     }
 }
