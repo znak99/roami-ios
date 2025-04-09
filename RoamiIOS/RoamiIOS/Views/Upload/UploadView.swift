@@ -9,7 +9,19 @@ import SwiftUI
 
 struct UploadView: View {
     var body: some View {
-        Text("UPLOAD")
+        ZStack {
+            Color.appBG.ignoresSafeArea()
+            
+            VStack {
+                HStack {
+                    Text("PROFILE")
+                        .font(.custom(AppFont.novaRound, size: 32))
+                    Spacer()
+                }
+                Spacer()
+            }
+            .padding([.top, .horizontal])
+        }
     }
 }
 

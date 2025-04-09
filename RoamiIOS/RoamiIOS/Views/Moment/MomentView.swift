@@ -9,7 +9,26 @@ import SwiftUI
 
 struct MomentView: View {
     var body: some View {
-        Text("MOMENT")
+        ZStack {
+            Color.appBG.ignoresSafeArea()
+            
+            VStack {
+                HStack {
+                    Text("MOMENT")
+                        .font(.custom(AppFont.novaRound, size: 32))
+                    Spacer()
+                    NavigationLink(destination: SettingView()) {
+                        Image(systemName: "pencil")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 24)
+                            .foregroundStyle(Color.black)
+                    }
+                }
+                Spacer()
+            }
+            .padding([.top, .horizontal])
+        }
     }
 }
 

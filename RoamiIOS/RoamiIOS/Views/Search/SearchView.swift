@@ -9,7 +9,19 @@ import SwiftUI
 
 struct SearchView: View {
     var body: some View {
-        Text("SEARCH")
+        ZStack {
+            Color.appBG.ignoresSafeArea()
+            
+            VStack {
+                HStack {
+                    Text("SEARCH")
+                        .font(.custom(AppFont.novaRound, size: 32))
+                    Spacer()
+                }
+                Spacer()
+            }
+            .padding([.top, .horizontal])
+        }
     }
 }
 
