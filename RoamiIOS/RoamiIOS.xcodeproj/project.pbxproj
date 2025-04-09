@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		FB687D752DA5D72500F8AF3F /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = FB687D742DA5D72500F8AF3F /* Alamofire */; };
+		FBCD755B2DA68A5700728912 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = FBCD755A2DA68A5700728912 /* KeychainSwift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +70,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FBCD755B2DA68A5700728912 /* KeychainSwift in Frameworks */,
 				FB687D752DA5D72500F8AF3F /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -131,6 +133,7 @@
 			name = RoamiIOS;
 			packageProductDependencies = (
 				FB687D742DA5D72500F8AF3F /* Alamofire */,
+				FBCD755A2DA68A5700728912 /* KeychainSwift */,
 			);
 			productName = RoamiIOS;
 			productReference = FB687D062DA5BA7C00F8AF3F /* RoamiIOS.app */;
@@ -216,6 +219,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				FB687D732DA5D72500F8AF3F /* XCRemoteSwiftPackageReference "Alamofire" */,
+				FBCD75592DA68A5700728912 /* XCRemoteSwiftPackageReference "keychain-swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = FB687D072DA5BA7C00F8AF3F /* Products */;
@@ -606,6 +610,14 @@
 				minimumVersion = 5.10.2;
 			};
 		};
+		FBCD75592DA68A5700728912 /* XCRemoteSwiftPackageReference "keychain-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/evgenyneu/keychain-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 24.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -613,6 +625,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FB687D732DA5D72500F8AF3F /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
+		};
+		FBCD755A2DA68A5700728912 /* KeychainSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FBCD75592DA68A5700728912 /* XCRemoteSwiftPackageReference "keychain-swift" */;
+			productName = KeychainSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -33,11 +33,11 @@ final class SigninViewModel: ObservableObject {
     @Published var isShowSignedInAlert: Bool = false
     
     func validateEmail() {
-        isEmailValidated = AuthService.shared.validateEmail(email: email)
+        isEmailValidated = AuthValidator.isValidEmail(email)
     }
     
     func validatePassword() {
-        isPasswordValidated = AuthService.shared.validatePassword(password: password)
+        isPasswordValidated = AuthValidator.isValidPassword(password)
     }
     
     func signin() {
@@ -48,17 +48,10 @@ final class SigninViewModel: ObservableObject {
         errorMessage = ""
         isLoading = true
         
-        AuthService.shared.signin(email: email, password: password) { result in
+        AuthManager.shared.signin(email: email, password: password) { result in
             switch result {
             case .success(let data):
-                print("token: \(data.access_token)")
                 self.isLoading = false
-                
-                AuthManager.shared.storeTokensToUserDefaults(access: data.access_token,
-                                                             refresh: data.refresh_token,
-                                                             accessExpiresAt: data.expires_at,
-                                                             refreshExpriesAt: data.refresh_expires_at)
-                
                 self.isShowSignedInAlert = true
             case .failure(let error):
                 switch error {
@@ -73,8 +66,9 @@ final class SigninViewModel: ObservableObject {
                     print("SigninViewModel Unknown Error: \(err.localizedDescription)")
                     self.errorMessage = err.localizedDescription
                 }
-                self.isLoading = false
+                
                 self.password = ""
+                self.isLoading = false
             }
         }
     }

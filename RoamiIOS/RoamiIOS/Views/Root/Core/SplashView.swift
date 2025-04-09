@@ -51,7 +51,7 @@ struct SplashView: View {
                     }
                 }
                 .blur(radius: blurRadius)
-                Spacer()
+                Spacer() 
             }
         }
         .onAppear {

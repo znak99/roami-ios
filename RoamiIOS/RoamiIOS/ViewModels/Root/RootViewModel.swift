@@ -13,7 +13,7 @@ final class RootViewModel: ObservableObject {
     @Published var isNetworkError: Bool = false
     
     func checkNetwork() {
-        RootService.shared.checkNetwork() { result in
+        RootManager.shared.launchApp() { result in
             switch result {
             case .success(let data):
                 print("RootViewModel Response: \(data.status)")

@@ -11,5 +11,7 @@
 		<string>Roboto-Regular.ttf</string>
 		<string>Roboto-Light.ttf</string>
 	</array>
+	<key>SERVER_URL</key>
+	<string>https://roami-api.onrender.com</string>
 </dict>
 </plist>

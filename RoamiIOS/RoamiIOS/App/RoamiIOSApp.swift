@@ -13,9 +13,8 @@ struct RoamiIOSApp: App {
     var body: some Scene {
         WindowGroup {
             RootView()
-                .environmentObject(AuthManager.shared)
                 .onAppear {
-                    AuthManager.shared.patchTokensFromUserDefaults()
+                    ServerURLManager.shared.initializeServerURL()
                 }
         }
     }

@@ -1,5 +1,5 @@
 //
-//  APIService.swift
+//  NetworkManager.swift
 //  RoamiIOS
 //
 //  Created by seungwoo on 2025/04/09.
@@ -8,22 +8,19 @@
 import Foundation
 import Alamofire
 
-class APIService {
-    
-    init () {}
-    
-    var url: String? {
-        if let url = ProcessInfo.processInfo.environment["SERVER_URL_TEST"] {
-            return url
+class NetworkManager {
+    var baseUrl: String? {
+        if let serverURL = ServerURLManager.shared.getServerURL() {
+            return serverURL
+        } else {
+            print("NetworkManager Error: URL is nil")
+            return nil
         }
-        
-        print("APIService Error: URL is nil")
-        return nil
     }
     
     func handleAFError<T: Decodable>(_ response: DataResponse<T, AFError>, completion: @escaping (Result<T, NetworkError>) -> Void) {
         let afError = response.error
-
+        
         if let urlError = afError?.underlyingError as? URLError,
            urlError.code == .notConnectedToInternet {
             completion(.failure(.noInternet))
@@ -49,5 +46,4 @@ class APIService {
             completion(.failure(.unknown(error: NSError(domain: "", code: -1, userInfo: nil))))
         }
     }
-
 }

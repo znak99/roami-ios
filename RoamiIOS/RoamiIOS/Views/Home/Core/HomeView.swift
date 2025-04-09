@@ -1,5 +1,5 @@
 //
-//  MomentsView.swift
+//  HomeView.swift
 //  RoamiIOS
 //
 //  Created by seungwoo on 2025/04/09.
@@ -7,18 +7,26 @@
 
 import SwiftUI
 
-struct MomentsView: View {
+struct HomeView: View {
     var body: some View {
         ZStack {
             Color.appBG.ignoresSafeArea()
             
             VStack {
                 HStack {
-                    Text("MOMENTS")
+                    Text("HOME")
                         .font(.custom(AppFont.novaRound, size: 32))
                     Spacer()
-                    NavigationLink(destination: SettingsView()) {
-                        Image(systemName: "pencil")
+                    NavigationLink(destination: EmptyView()) {
+                        Image(systemName: "bell.fill")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 24)
+                            .foregroundStyle(Color.black)
+                            .padding(.horizontal)
+                    }
+                    NavigationLink(destination: EmptyView()) {
+                        Image(systemName: "slider.horizontal.3")
                             .resizable()
                             .scaledToFit()
                             .frame(width: 24)
@@ -33,5 +41,5 @@ struct MomentsView: View {
 }
 
 #Preview {
-    MomentsView()
+    HomeView()
 }

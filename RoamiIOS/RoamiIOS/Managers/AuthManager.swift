@@ -6,77 +6,139 @@
 //
 
 import Foundation
+import KeychainSwift
+import Alamofire
 
-final class AuthManager: ObservableObject {
-    static let shared = AuthManager()
+final class AuthManager: NetworkManager {
     
-    private init() {}
+    static let shared: AuthManager = AuthManager()
     
-    @Published var isAuthenticated: Bool = false
+    private override init() {}
     
-    @Published var accessToken: String? = nil
-    @Published var refreshToken: String? = nil
-    @Published var accessTokenExpiresAt: String? = nil
-    @Published var refreshTokenExpiresAt: String? = nil
+    private let keychain = KeychainSwift()
     
-    func parseISODate(_ isoString: String) -> Date? {
-        let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [
-            .withInternetDateTime,
-            .withFractionalSeconds
-        ]
-        return formatter.date(from: isoString)
-    }
+    var isAuthenticated: Bool = false
+    var userInfo: UserInfo? = nil
     
-    func isTokenExpired(_ iso: Date) -> Bool {
-        return iso < Date()
-    }
-    
-    func patchTokensFromUserDefaults() {
-        let userDefaults = UserDefaults.standard
+    func signin(email: String, password: String, completion: @escaping (Result<SigninResponse, NetworkError>) -> Void) {
+        guard let baseUrl else {
+            print("AuthManager Error: URL is nil")
+            return
+        }
         
-        accessToken = userDefaults.string(forKey: "access_token")
-        refreshToken = userDefaults.string(forKey: "refresh_token")
-        accessTokenExpiresAt = userDefaults.string(forKey: "access_token_expires_at")
-        refreshTokenExpiresAt = userDefaults.string(forKey: "refresh_token_expires_at")
+        let url: String = baseUrl + "/auth/login"
+        let parameters: SigninRequest = SigninRequest(email: email, password: password)
         
-        if let _ = accessToken, let _ = refreshToken,
-           let _ = accessTokenExpiresAt, let refreshTokenExpriesAt = refreshTokenExpiresAt {
-            if let refreshTokenExpireDate = parseISODate(refreshTokenExpriesAt) {
-                self.isAuthenticated = !isTokenExpired(refreshTokenExpireDate)
+        AF.request(url, method: .post, parameters: parameters, encoder: JSONParameterEncoder.default)
+            .validate()
+            .responseDecodable(of: SigninResponse.self) { response in
+                switch response.result {
+                case .success(let signinResponse):
+                    self.userInfo = UserInfo(name: signinResponse.name,
+                                             email: signinResponse.email,
+                                             accessToken: signinResponse.access_token,
+                                             refreshToken: signinResponse.refresh_token)
+                    if let userInfo = self.userInfo {
+                        self.storeUserInfo(userInfo)
+                        self.isAuthenticated = true
+                        completion(.success(signinResponse))
+                    } else {
+                        self.handleAFError(response, completion: completion)
+                    }
+                case .failure(let error):
+                    self.handleAFError(response, completion: completion)
+                }
             }
+    }
+    
+    func signup(name: String, email: String, password: String, completion: @escaping (Result<SignupResponse, NetworkError>) -> Void) {
+        guard let baseUrl else {
+            print("AuthManager Error: URL is nil")
+            return
+        }
+        
+        let url: String = baseUrl + "/auth/signup"
+        let parameters: SignupRequest = SignupRequest(name: name, email: email, password: password)
+        
+        AF.request(url, method: .post, parameters: parameters, encoder: JSONParameterEncoder.default)
+            .validate()
+            .responseDecodable(of: SignupResponse.self) { response in
+                switch response.result {
+                case .success(let signupResponse):
+                    self.userInfo = UserInfo(name: signupResponse.name,
+                                             email: signupResponse.email,
+                                             accessToken: signupResponse.access_token,
+                                             refreshToken: signupResponse.refresh_token)
+                    if let userInfo = self.userInfo {
+                        self.storeUserInfo(userInfo)
+                        self.isAuthenticated = true
+                        completion(.success(signupResponse))
+                    } else {
+                        self.handleAFError(response, completion: completion)
+                    }
+                case .failure(let error):
+                    self.handleAFError(response, completion: completion)
+                }
+            }
+    }
+    
+    func signout(completion: @escaping (Result<SignoutResponse, NetworkError>) -> Void) {
+        guard let baseUrl else {
+            print("AuthManager Error: URL is nil")
+            return
+        }
+        
+        guard let userInfo else {
+            print("AuthManager Error: UserInfo is nil")
+            return
+        }
+        
+        let url: String = baseUrl + "/auth/logout"
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(userInfo.refreshToken)",
+            "Content-Type": "application/json",
+        ]
+        
+        AF.request(url, method: .post, headers: headers)
+            .validate()
+            .responseDecodable(of: SignoutResponse.self) { response in
+                switch response.result {
+                case .success(let signoutResponse):
+                    self.removeUserInfo()
+                    self.userInfo = nil
+                    self.isAuthenticated = false
+                    completion(.success(signoutResponse))
+                case .failure(let error):
+                    self.handleAFError(response, completion: completion)
+                }
+            }
+    }
+    
+    private func storeUserInfo(_ userInfo: UserInfo) {
+        keychain.synchronizable = true
+        
+        do {
+            let data = try JSONEncoder().encode(userInfo)
+            keychain.set(data, forKey: "USER_INFO")
+        } catch {
+            print("AuthManager Error: UserInfo encoding error")
         }
     }
     
-    func storeTokensToUserDefaults(access: String, refresh: String, accessExpiresAt: String, refreshExpriesAt: String) {
-        let userDefaults = UserDefaults.standard
+    private func loadUserInfo(_ userInfo: UserInfo) {
+        keychain.synchronizable = true
         
-        userDefaults.set(access, forKey: "access_token")
-        userDefaults.set(refresh, forKey: "refresh_token")
-        userDefaults.set(accessExpiresAt, forKey: "access_token_expires_at")
-        userDefaults.set(refreshExpriesAt, forKey: "refresh_token_expires_at")
-        
-        accessToken = access
-        refreshToken = refresh
-        accessTokenExpiresAt = accessExpiresAt
-        refreshTokenExpiresAt = refreshExpriesAt
-        
-        isAuthenticated = true
+        do {
+            if let data = keychain.getData("USER_INFO") {
+                self.userInfo = try JSONDecoder().decode(UserInfo.self, from: data)
+            }
+        } catch {
+            print("AuthManager Error: UserInfo decoding error")
+        }
     }
     
-    func removeTokensFromUserDefaults() {
-        let userDefaults = UserDefaults.standard
-        
-        userDefaults.removeObject(forKey: "access_token")
-        userDefaults.removeObject(forKey: "refresh_token")
-        userDefaults.removeObject(forKey: "access_token_expires_at")
-        userDefaults.removeObject(forKey: "refresh_token_expires_at")
-        
-        accessToken = nil
-        refreshToken = nil
-        accessTokenExpiresAt = nil
-        refreshTokenExpiresAt = nil
-        
-        isAuthenticated = false
+    private func removeUserInfo() {
+        keychain.synchronizable = true
+        keychain.delete("USER_INFO")
     }
 }
