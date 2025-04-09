@@ -11,8 +11,6 @@ struct ProfileView: View {
     
     @StateObject private var vm: ProfileViewModel = .init()
     
-    @EnvironmentObject var authManager: AuthManager
-    
     var body: some View {
         ZStack {
             Color.appBG.ignoresSafeArea()
@@ -32,7 +30,7 @@ struct ProfileView: View {
                 }
                 Spacer()
                 
-                if authManager.isAuthenticated {
+                if AuthManager.shared.isAuthenticated {
                     Text("Authenticate")
                 } else {
                     VStack(spacing: 8) {
@@ -76,5 +74,4 @@ struct ProfileView: View {
 
 #Preview {
     ProfileView()
-        .environmentObject(AuthManager.shared)
 }

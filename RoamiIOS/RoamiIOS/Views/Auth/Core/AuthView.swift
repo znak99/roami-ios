@@ -14,7 +14,6 @@ struct AuthView: View {
     
     @State private var hasAnimated: Bool = false
     
-    @EnvironmentObject var authManager: AuthManager
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
@@ -65,26 +64,26 @@ struct AuthView: View {
                             NavigationLink(destination: SigninView()) {
                                 AuthEmailButton(icon: "at", text: "Sign In with Email", opacity: $opacity)
                             }
-                            .disabled(authManager.isAuthenticated)
+                            .disabled(AuthManager.shared.isAuthenticated)
                             NavigationLink(destination: EmptyView()) {
                                 AuthEmailButton(icon: "person.fill.badge.plus", text: "Sign Up with Email", opacity: $opacity)
                             }
-                            .disabled(authManager.isAuthenticated)
+                            .disabled(AuthManager.shared.isAuthenticated)
                         }
                         
                         VStack {
                             Button(action: {}) {
                                 AuthOAuthButton(image: "OAuth-Apple", text: "Sign In with Apple", opacity: $opacity)
                             }
-                            .disabled(authManager.isAuthenticated)
+                            .disabled(AuthManager.shared.isAuthenticated)
                             Button(action: {}) {
                                 AuthOAuthButton(image: "OAuth-Google", text: "Sign In with Google", opacity: $opacity)
                             }
-                            .disabled(authManager.isAuthenticated)
+                            .disabled(AuthManager.shared.isAuthenticated)
                             Button(action: {}) {
                                 AuthOAuthButton(image: "OAuth-Facebook", text: "Sign In with Facebook", opacity: $opacity)
                             }
-                            .disabled(authManager.isAuthenticated)
+                            .disabled(AuthManager.shared.isAuthenticated)
                         }
                     }
                     
@@ -93,7 +92,7 @@ struct AuthView: View {
                 .padding([.top, .horizontal])
             }
             .onAppear {
-                if authManager.isAuthenticated {
+                if AuthManager.shared.isAuthenticated {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                         dismiss()
                     }

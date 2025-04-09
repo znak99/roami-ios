@@ -9,9 +9,13 @@ import SwiftUI
 
 @main
 struct RoamiIOSApp: App {
+    
     var body: some Scene {
         WindowGroup {
             RootView()
+                .onAppear {
+                    ServerURLManager.shared.initializeServerURL()
+                }
         }
     }
 }
