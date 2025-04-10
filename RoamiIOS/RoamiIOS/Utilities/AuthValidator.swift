@@ -17,4 +17,9 @@ struct AuthValidator {
         let regex = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*(),.?\":{}|<>\\-=]).{8,}$"
         return NSPredicate(format: "SELF MATCHES %@", regex).evaluate(with: password)
     }
+    
+    static func isValidName(_ name: String) -> Bool {
+        let regex = "^[A-Za-z]{3,20}$"
+        return NSPredicate(format: "SELF MATCHES %@", regex).evaluate(with: name)
+    }
 }

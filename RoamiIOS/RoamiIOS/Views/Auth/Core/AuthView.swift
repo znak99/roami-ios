@@ -65,7 +65,7 @@ struct AuthView: View {
                                 AuthEmailButton(icon: "at", text: "Sign In with Email", opacity: $opacity)
                             }
                             .disabled(AuthManager.shared.isAuthenticated)
-                            NavigationLink(destination: EmptyView()) {
+                            NavigationLink(destination: SignupView()) {
                                 AuthEmailButton(icon: "person.fill.badge.plus", text: "Sign Up with Email", opacity: $opacity)
                             }
                             .disabled(AuthManager.shared.isAuthenticated)

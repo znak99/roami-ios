@@ -45,7 +45,7 @@ final class AuthManager: NetworkManager {
                     } else {
                         self.handleAFError(response, completion: completion)
                     }
-                case .failure(let error):
+                case .failure:
                     self.handleAFError(response, completion: completion)
                 }
             }
@@ -76,7 +76,7 @@ final class AuthManager: NetworkManager {
                     } else {
                         self.handleAFError(response, completion: completion)
                     }
-                case .failure(let error):
+                case .failure:
                     self.handleAFError(response, completion: completion)
                 }
             }
@@ -108,7 +108,47 @@ final class AuthManager: NetworkManager {
                     self.userInfo = nil
                     self.isAuthenticated = false
                     completion(.success(signoutResponse))
-                case .failure(let error):
+                case .failure:
+                    self.handleAFError(response, completion: completion)
+                }
+            }
+    }
+    
+    func refreshToken(completion: @escaping (Result<TokenRefreshResponse, NetworkError>) -> Void) {
+        guard let baseUrl else {
+            print("AuthManager Error: URL is nil")
+            return
+        }
+        
+        guard let userInfo else {
+            print("AuthManager Error: UserInfo is nil")
+            return
+        }
+        
+        let url: String = baseUrl + "/auth/refresh"
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(userInfo.refreshToken)",
+            "Content-Type": "application/json",
+        ]
+        let parameters: TokenRefreshRequest = TokenRefreshRequest(refresh_token: userInfo.refreshToken)
+        
+        AF.request(url, method: .post, parameters: parameters, encoder: JSONParameterEncoder.default)
+            .validate()
+            .responseDecodable(of: TokenRefreshResponse.self) { response in
+                switch response.result {
+                case .success(let tokenRefreshResponse):
+                    self.userInfo = UserInfo(name: tokenRefreshResponse.name,
+                                             email: tokenRefreshResponse.email,
+                                             accessToken: tokenRefreshResponse.access_token,
+                                             refreshToken: tokenRefreshResponse.refresh_token)
+                    if let userInfo = self.userInfo {
+                        self.storeUserInfo(userInfo)
+                        self.isAuthenticated = true
+                        completion(.success(tokenRefreshResponse))
+                    } else {
+                        self.handleAFError(response, completion: completion)
+                    }
+                case .failure:
                     self.handleAFError(response, completion: completion)
                 }
             }

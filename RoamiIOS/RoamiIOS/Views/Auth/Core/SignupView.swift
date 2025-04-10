@@ -1,15 +1,15 @@
 //
-//  SigninView.swift
+//  SignupView.swift
 //  RoamiIOS
 //
-//  Created by seungwoo on 2025/04/09.
+//  Created by seungwoo on 2025/04/10.
 //
 
 import SwiftUI
 
-struct SigninView: View {
+struct SignupView: View {
     
-    @StateObject private var vm: SigninViewModel = SigninViewModel()
+    @StateObject private var vm: SignupViewModel = SignupViewModel()
     
     @Environment(\.dismiss) var dismiss
     
@@ -34,11 +34,11 @@ struct SigninView: View {
                 }
                 
                 VStack {
-                    Text("Sign In")
+                    Text("Sign Up")
                         .font(.custom(AppFont.robotoSemiBold, size: 32))
                         .foregroundStyle(LinearGradient(colors: [.blue, .purple],
                                                         startPoint: .topLeading, endPoint: .bottomTrailing))
-                    Text("Access to your account")
+                    Text("Create a new account")
                         .font(.custom(AppFont.robotoRegular, size: 16))
                         .foregroundStyle(.gray)
                 }
@@ -55,6 +55,44 @@ struct SigninView: View {
                 }
                 
                 VStack(spacing: 12) {
+                    HStack {
+                        ZStack {
+                            TextField("Name", text: $vm.name)
+                                .font(.custom(AppFont.robotoRegular, size: 16))
+                                .padding()
+                                .background(Color.white)
+                                .clipShape(RoundedRectangle(cornerRadius: 4))
+                                .autocorrectionDisabled()
+                                .textInputAutocapitalization(.never)
+                                .textContentType(.emailAddress)
+                                .keyboardType(.emailAddress)
+                                .disabled(vm.isLoading)
+                                .onChange(of: vm.name) {
+                                    withAnimation {
+                                        vm.validateName()
+                                    }
+                                }
+                            
+                            if vm.name.count > 0 {
+                                HStack {
+                                    Spacer()
+                                    
+                                    Button(action: { vm.name = "" }) {
+                                        Image(systemName: "xmark")
+                                            .foregroundStyle(.gray)
+                                    }
+                                    .padding(.trailing, 12)
+                                    .disabled(vm.isLoading)
+                                }
+                            }
+                        }
+                            
+                        if vm.isNameValidated {
+                            Image(systemName: "checkmark")
+                                .foregroundStyle(.green)
+                        }
+                    }
+                    
                     HStack {
                         ZStack {
                             TextField("Email", text: $vm.email)
@@ -134,9 +172,51 @@ struct SigninView: View {
                                 .foregroundStyle(.green)
                         }
                     }
+                    
+                    HStack {
+                        ZStack {
+                            Group {
+                                if vm.isPasswordVisible {
+                                    TextField("Confirm Password", text: $vm.confirmPassword)
+                                        .keyboardType(.asciiCapable)
+                                } else {
+                                    SecureField("Confirm Password", text: $vm.confirmPassword)
+                                }
+                            }
+                            .font(.custom(AppFont.robotoRegular, size: 16))
+                            .padding()
+                            .background(Color.white)
+                            .clipShape(RoundedRectangle(cornerRadius: 4))
+                            .autocorrectionDisabled()
+                            .textContentType(.password)
+                            .textInputAutocapitalization(.never)
+                            .disabled(vm.isLoading)
+                            .onChange(of: vm.confirmPassword) {
+                                withAnimation {
+                                    vm.validateConfirmPassword()
+                                }
+                            }
+                            
+                            if vm.confirmPassword.count > 0 {
+                                HStack {
+                                    Spacer()
+                                    Button(action: { vm.isPasswordVisible.toggle() }) {
+                                        Image(systemName: vm.isPasswordVisible ? "eye.slash" : "eye")
+                                            .foregroundStyle(.gray)
+                                    }
+                                    .padding(.trailing, 12)
+                                    .disabled(vm.isLoading)
+                                }
+                            }
+                        }
+                        if vm.isConfirmPasswordValidated {
+                            Image(systemName: "checkmark")
+                                .foregroundStyle(.green)
+                        }
+                    }
                 }
                 
-                Button(action: vm.signin) {
+                Button(action: vm.signup) {
                     HStack {
                         Spacer()
                         if vm.isLoading {
@@ -144,7 +224,7 @@ struct SigninView: View {
                                 .font(.system(size: 16))
                                 .tint(Color.white)
                         } else {
-                            Text("Sign In")
+                            Text("Sign Up")
                                 .font(.custom(AppFont.robotoMedium, size: 16))
                                 .foregroundStyle(.white)
                         }
@@ -156,25 +236,10 @@ struct SigninView: View {
                 }
                 .padding(.top)
                 
-                NavigationLink(destination: EmptyView()) {
-                    HStack {
-                        Text("Forgot your password?")
-                            .font(.custom(AppFont.robotoMedium, size: 16))
-                        Spacer()
-                        Image(systemName: "chevron.right")
-                    }
-                    .foregroundStyle(.black)
-                    .padding(12)
-                    .background(.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 2))
-                }
-                .padding(.top)
-                .disabled(vm.isLoading)
-                
                 Spacer()
             }
             .padding([.top, .horizontal])
-            .alert("Authentication", isPresented: $vm.isShowSignedInAlert) {
+            .alert("Authentication", isPresented: $vm.isShowSignedUpAlert) {
                 Button("OK", role: .cancel) {
                     dismiss()
                 }
@@ -196,8 +261,6 @@ struct SigninView: View {
     }
 }
 
-
-
 #Preview {
-    SigninView()
+    SignupView()
 }

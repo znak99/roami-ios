@@ -1,14 +1,20 @@
 //
-//  SigninViewModel.swift
+//  SignupViewModel.swift
 //  RoamiIOS
 //
-//  Created by seungwoo on 2025/04/09.
+//  Created by seungwoo on 2025/04/10.
 //
 
 import Foundation
-import SwiftUI
 
-final class SigninViewModel: ObservableObject {
+final class SignupViewModel: ObservableObject {
+    @Published var name: String = "" {
+        didSet {
+            if name.contains(" ") {
+                name = name.replacingOccurrences(of: " ", with: "")
+            }
+        }
+    }
     @Published var email: String = "" {
         didSet {
             if email.contains(" ") {
@@ -23,14 +29,27 @@ final class SigninViewModel: ObservableObject {
             }
         }
     }
+    @Published var confirmPassword: String = "" {
+        didSet {
+            if confirmPassword.contains(" ") {
+                confirmPassword = confirmPassword.replacingOccurrences(of: " ", with: "")
+            }
+        }
+    }
     
     @Published var errorMessage: String = ""
     
     @Published var isLoading: Bool = false
+    @Published var isNameValidated: Bool = false
     @Published var isEmailValidated: Bool = false
     @Published var isPasswordValidated: Bool = false
+    @Published var isConfirmPasswordValidated: Bool = false
     @Published var isPasswordVisible: Bool = false
-    @Published var isShowSignedInAlert: Bool = false
+    @Published var isShowSignedUpAlert: Bool = false
+    
+    func validateName() {
+        isNameValidated = AuthValidator.isValidName(name)
+    }
     
     func validateEmail() {
         isEmailValidated = AuthValidator.isValidEmail(email)
@@ -40,40 +59,46 @@ final class SigninViewModel: ObservableObject {
         isPasswordValidated = AuthValidator.isValidPassword(password)
     }
     
-    func signin() {
-        if !isEmailValidated || !isPasswordValidated {
+    func validateConfirmPassword() {
+        isConfirmPasswordValidated = password == confirmPassword
+    }
+    
+    func signup() {
+        if !isNameValidated || !isEmailValidated || !isPasswordValidated || !isConfirmPasswordValidated {
             errorMessage = "All fields are required!"
             return
         }
         
         if isLoading {
-            errorMessage = "Please wait, now signing in..."
+            errorMessage = "Please wait, now signing up..."
             return
         }
         
         errorMessage = ""
         isLoading = true
         
-        AuthManager.shared.signin(email: email, password: password) { result in
+        AuthManager.shared.signup(name: name, email: email, password: password) { result in
             switch result {
+                
             case .success:
                 self.isLoading = false
-                self.isShowSignedInAlert = true
+                self.isShowSignedUpAlert = true
             case .failure(let error):
                 switch error {
                 case .invalidCredentials(let message), .serverError(message: let message):
-                    print("SigninViewModel Server Error: \(message)")
+                    print("SignupViewModel Server Error: \(message)")
                     self.errorMessage = message
                 case .decodingError:
-                    print("SigninViewModel Error: Decoding Error")
+                    print("SignupViewModel Error: Decoding Error")
                 case .noInternet:
-                    print("SigninViewModel Error: No Internet")
+                    print("SignupViewModel Error: No Internet")
                 case .unknown(error: let err):
-                    print("SigninViewModel Unknown Error: \(err.localizedDescription)")
+                    print("SignupViewModel Unknown Error: \(err.localizedDescription)")
                     self.errorMessage = err.localizedDescription
                 }
                 
                 self.password = ""
+                self.confirmPassword = ""
                 self.isLoading = false
             }
             
